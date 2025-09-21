@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TQY Express - Sistem Manajemen Logistik</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 51, 102, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #003366;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: #d4af37;
+            margin-right: 8px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-subtext {
+            font-size: 0.7rem;
+            color: #6b7280;
+            font-weight: normal;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #003366;
+            cursor: pointer;
+        }
+
+        nav {
+            position: relative;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: #e6f2ff;
+            color: #003366;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #003366;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0066cc;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #003366;
+            border: 2px solid #003366;
+        }
+
+        .btn-outline:hover {
+            background: #003366;
+            color: white;
+        }
+
+        .btn-yellow {
+            background: #d4af37;
+            color: #374151;
+        }
+
+        .btn-yellow:hover {
+            background: #b8941f;
+        }
+
+        /* Main Content */
+        .page-section {
+            display: none;
+            min-height: 80vh;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #e6f2ff 0%, #ffffff 100%);
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            text-align: center;
+        }
+
+        .hero-image i {
+            font-size: 6rem;
+            color: #003366;
+            opacity: 0.7;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+            text-align: center;
+            border-left: 4px solid #d4af37;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 3rem 0;
+            background: #f8fafc;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .content h2 {
+            color: #003366;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .content h3 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            border: 2px solid #e6f2ff;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: #003366;
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .service-price {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        /* Branches Grid */
+        .branches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .branch-card {
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .branch-card h3 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .branch-card i {
+            color: #003366;
+            margin-right: 8px;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .contact-item i {
+            color: #003366;
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .contact-form {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #003366;
+        }
+
+        /* Login Section */
+        .login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            background: linear-gradient(135deg, #e6f2ff 0%, #ffffff 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0, 51, 102, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-info {
+            background: #e6f2ff;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: 2rem 0;
+            background: #f8fafc;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #d4af37;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Tracking */
+        .tracking-result {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .package-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-in-transit {
+            background: #ddd6fe;
+            color: #7c3aed;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #10b981;
+        }
+
+        .status-processing {
+            background: #e6f2ff;
+            color: #003366;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #003366;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #d4af37;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #003366;
+        }
+
+        .timeline h4 {
+            color: #003366;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #374151;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo i {
+            color: #d4af37;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.875rem;
+        }
+
+        /* Form Styles */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .admin-tab.active {
+            border-bottom: 3px solid #003366;
+            color: #003366;
+            font-weight: 600;
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem;
+                transform: translateY(-20px);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            nav ul.active {
+                transform: translateY(0);
+                opacity: 1;
+            visibility: visible;
+            }
+
+            nav ul li {
+                width: 100%;
+            }
+
+            nav ul li a {
+                display: block;
+                width: 100%;
+                padding: 12px 16px;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .auth-buttons {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .admin-tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+
+            .admin-tab {
+                border-bottom: 1px solid #e5e7eb;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .branches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-shipping-fast"></i>
+                    <div class="logo-text">
+                        TQY Express
+                        <span class="logo-subtext">Transparent, Quick, Your Trusted</span>
+                    </div>
+                </div>
+                
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav>
+                    <ul id="nav-menu">
+                        <li><a href="#" onclick="showSection('home')" class="nav-link" data-section="home">Beranda</a></li>
+                        <li><a href="#" onclick="showSection('about')" class="nav-link" data-section="about">Tentang Kami</a></li>
+                        <li><a href="#" onclick="showSection('services')" class="nav-link" data-section="services">Layanan</a></li>
+                        <li><a href="#" onclick="showSection('branches')" class="nav-link" data-section="branches">Cabang</a></li>
+                        <li><a href="#" onclick="showSection('contact')" class="nav-link" data-section="contact">Kontak</a></li>
+                    </ul>
+                </nav>
+
+                <div class="auth-buttons" id="auth-buttons">
+                    <button class="btn btn-outline" onclick="showLogin()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Masuk
+                    </button>
+                    <button class="btn btn-yellow" onclick="showCustomerTracking()">
+                        <i class="fas fa-search"></i>
+                        Lacak Paket
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home-section" class="page-section active">
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div>
+                        <h1>Solusi Logistik Terpercaya untuk Indonesia</h1>
+                        <p>TQY Express menyediakan layanan pengiriman yang cepat, aman, dan terpercaya ke seluruh nusantara dengan teknologi tracking real-time.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="showCustomerTracking()">
+                                <i class="fas fa-search"></i>
+                                Lacak Paket Sekarang
+                            </button>
+                            <button class="btn btn-outline" onclick="showLogin()">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Portal Pengguna
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">50,000+</div>
+                    <div class="stat-label">Paket Terkirim</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">34</div>
+                    <div class="stat-label">Kota Terjangkau</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Customer Service</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">99.5%</div>
+                    <div class="stat-label">Tingkat Kepuasan</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-section" class="page-section">
+        <div class="content">
+            <div class="container">
+                <div class="content-card">
+                    <h2>Tentang TQY Express</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+                        <div>
+                            <h3>Visi Kami</h3>
+                            <p>Menjadi penyedia layanan logistik terdepan di Indonesia yang menghubungkan setiap sudut nusantara dengan teknologi modern dan pelayanan terbaik.</p>
+                            
+                            <h3 style="margin-top: 2rem;">Misi Kami</h3>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Memberikan layanan pengiriman yang cepat, aman, dan terpercaya</li>
+                                <li>Menggunakan teknologi terkini untuk transparansi tracking</li>
+                                <li>Membangun jaringan distribusi yang luas di seluruh Indonesia</li>
+                            </ul>
+                        </div>
+                        <div style="text-align: center;">
+                            <i class="fas fa-shipping-fast" style="font-size: 5rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                            <h4>Teknologi Modern</h4>
+                            <p>Sistem tracking real-time dan manajemen logistik terintegrasi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services-section" class="page-section">
+        <div class="content">
+            <div class="container">
+                <div class="content-card">
+                    <h2>Layanan Kami</h2>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <i class="fas fa-rocket"></i>
+                            <h3>Same Day Delivery</h3>
+                            <p>Pengiriman dalam hari yang sama untuk area Jabodetabek</p>
+                            <div class="service-price">Mulai Rp 15.000</div>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-plane"></i>
+                            <h3>Express Delivery</h3>
+                            <p>Pengiriman 1-2 hari kerja ke seluruh Indonesia</p>
+                            <div class="service-price">Mulai Rp 12.000</div>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-truck"></i>
+                            <h3>Regular Delivery</h3>
+                            <p>Pengiriman 2-4 hari kerja, ekonomis dan terpercaya</p>
+                            <div class="service-price">Mulai Rp 8.000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Branches Section -->
+    <section id="branches-section" class="page-section">
+        <div class="content">
+            <div class="container">
+                <div class="content-card">
+                    <h2>Daftar Cabang TQY Express</h2>
+                    <div class="branches-grid">
+                        <div class="branch-card">
+                            <h3><i class="fas fa-map-marker-alt"></i> Jakarta</h3>
+                            <div>
+                                <strong>Hub Jakarta Pusat</strong><br>
+                                Jl. Sudirman No. 123, Jakarta Pusat<br>
+                                <i class="fas fa-phone"></i> (021) 123-4567<br>
+                                <i class="fas fa-clock"></i> 08:00 - 17:00 WIB
+                            </div>
+                        </div>
+                        <div class="branch-card">
+                            <h3><i class="fas fa-map-marker-alt"></i> Surabaya</h3>
+                            <div>
+                                <strong>Hub Surabaya Pusat</strong><br>
+                                Jl. Tunjungan No. 789, Surabaya<br>
+                                <i class="fas fa-phone"></i> (031) 345-6789<br>
+                                <i class="fas fa-clock"></i> 08:00 - 17:00 WIB
+                            </div>
+                        </div>
+                        <div class="branch-card">
+                            <h3><i class="fas fa-map-marker-alt"></i> Bandung</h3>
+                            <div>
+                                <strong>Hub Bandung</strong><br>
+                                Jl. Asia Afrika No. 321, Bandung<br>
+                                <i class="fas fa-phone"></i> (022) 456-7890<br>
+                                <i class="fas fa-clock"></i> 08:00 - 17:00 WIB
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact-section" class="page-section">
+        <div class="content">
+            <div class="container">
+                <div class="content-card">
+                    <h2>Hubungi Kami</h2>
+                    <div class="contact-grid">
+                        <div>
+                            <h3>Informasi Kontak</h3>
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <div>
+                                        <strong>Customer Service</strong><br>
+                                        0804-1-TQYEXP (879397)<br>
+                                        <small>24 jam setiap hari</small>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <div>
+                                        <strong>Email</strong><br>
+                                        cs@tqyexpress.co.id<br>
+                                        <small>Respon dalam 24 jam</small>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div>
+                                        <strong>Kantor Pusat</strong><br>
+                                        Jl. Gatot Subroto No. 1<br>
+                                        Jakarta Selatan 12930
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Kirim Pesan</h3>
+                            <div class="contact-form">
+                                <div class="form-group">
+                                    <label>Nama Lengkap</label>
+                                    <input type="text" id="contact-name" placeholder="Masukkan nama lengkap">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="contact-email" placeholder="Masukkan email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Pesan</label>
+                                    <textarea id="contact-message" rows="4" placeholder="Tulis pesan Anda"></textarea>
+                                </div>
+                                <button class="btn btn-primary" style="width: 100%;" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i> Kirim Pesan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login-section" class="page-section">
+        <div class="login">
+            <div class="login-card">
+                <div class="login-header">
+                    <h2>Masuk ke TQY Express</h2>
+                    <p>Sistem Manajemen Logistik Terpadu</p>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="admin / hub / courier / customer">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Masuk
+                </button>
+                <div class="demo-info">
+                    <strong>Demo Login:</strong><br>
+                    Admin: admin / admin123<br>
+                    Hub: hub / hub123<br>
+                    Courier: courier / courier123<br>
+                    Customer: customer (tanpa password)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Section -->
+    <section id="customer-section" class="page-section">
+        <div class="dashboard">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div>
+                        <h2>Portal Customer</h2>
+                        <p>Lacak pengiriman paket Anda secara real-time</p>
+                    </div>
+                    <button class="btn logout-btn" onclick="logout()">
+                        <i class="fas fa-home"></i>
+                        Kembali
+                    </button>
+                </div>
+
+                <div class="content-card">
+                    <h3><i class="fas fa-search"></i> Lacak Paket</h3>
+                    <div class="form-group">
+                        <label>Nomor Resi</label>
+                        <input type="text" id="tracking-number" placeholder="Contoh: TQ240001">
+                    </div>
+                    <button class="btn btn-primary" onclick="trackPackage()">
+                        <i class="fas fa-search"></i>
+                        Lacak Paket
+                    </button>
+                    
+                    <div id="tracking-result" class="tracking-result">
+                        <h4>Status Pengiriman: <span id="package-id">#TQ240001</span></h4>
+                        <div class="package-item">
+                            <div>
+                                <strong id="package-route">Jakarta → Surabaya</strong><br>
+                                <span>Penerima: <span id="package-receiver">Budi Santoso</span></span>
+                            </div>
+                            <span class="status-badge status-in-transit" id="package-status">Dalam Perjalanan</span>
+                        </div>
+                        
+                        <h4 style="margin-top: 2rem;">Riwayat Perjalanan</h4>
+                        <div class="timeline" id="package-timeline">
+                            <!-- Timeline akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Contoh Nomor Resi untuk Testing</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; background: #e6f2ff; border-radius: 8px; cursor: pointer;" onclick="testTrack('TQ240001')">
+                            <strong>TQ240001</strong><br>
+                            <small>Jakarta → Surabaya</small>
+                        </div>
+                        <div style="padding: 1rem; background: #fff8e6; border-radius: 8px; cursor: pointer;" onclick="testTrack('TQ240002')">
+                            <strong>TQ240002</strong><br>
+                            <small>Bandung → Jakarta</small>
+                        </div>
+                        <div style="padding: 1rem; background: #d1fae5; border-radius: 8px; cursor: pointer;" onclick="testTrack('TQ240003')">
+                            <strong>TQ240003</strong><br>
+                            <small>Jakarta → Medan</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard -->
+    <section id="admin-dashboard" class="page-section">
+        <div class="dashboard">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="user-avatar">A</div>
+                        <div>
+                            <h2>Dashboard Admin</h2>
+                            <h5>Selamat datang, Admin!</h5>
+                            <p>Pengelolaan aplikasi secara keseluruhan</p>
+                        </div>
+                    </div>
+                    <button class="btn logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Keluar
+                    </button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">1,250</div>
+                        <div class="stat-label">Total Paket Hari Ini</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">45</div>
+                        <div class="stat-label">Pengguna Aktif</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">98.5%</div>
+                        <div class="stat-label">Delivery Success Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Hub Aktif</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="admin-tabs">
+                        <div class="admin-tab active" data-tab="overview">Overview</div>
+                        <div class="admin-tab" data-tab="users">Manajemen Pengguna</div>
+                        <div class="admin-tab" data-tab="hubs">Manajemen Hub</div>
+                        <div class="admin-tab" data-tab="shipments">Manajemen Pengiriman</div>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div class="admin-content active" id="overview-content">
+                        <h3>Manajemen Sistem</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="switchTab('users')">
+                                <i class="fas fa-users"></i>
+                                Kelola Pengguna
+                            </button>
+                            <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="switchTab('hubs')">
+                                <i class="fas fa-warehouse"></i>
+                                Kelola Hub
+                            </button>
+                            <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="switchTab('shipments')">
+                                <i class="fas fa-box"></i>
+                                Kelola Paket
+                            </button>
+                            <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showReports()">
+                                <i class="fas fa-chart-bar"></i>
+                                Laporan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Users Management Tab -->
+                    <div class="admin-content" id="users-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h3>Daftar Pengguna</h3>
+                            <button class="btn btn-primary" onclick="showUserForm()">
+                                <i class="fas fa-plus"></i>
+                                Tambah Pengguna
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Admin Utama</td>
+                                        <td>admin@tqyexpress.co.id</td>
+                                        <td>Admin</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Manager Hub Jakarta</td>
+                                        <td>hubjakarta@tqyexpress.co.id</td>
+                                        <td>Hub Lead</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kurir Andi</td>
+                                        <td>andi@tqyexpress.co.id</td>
+                                        <td>Kurir</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Hubs Management Tab -->
+                    <div class="admin-content" id="hubs-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h3>Daftar Hub</h3>
+                            <button class="btn btn-primary" onclick="showHubForm()">
+                                <i class="fas fa-plus"></i>
+                                Tambah Hub
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Hub</th>
+                                        <th>Lokasi</th>
+                                        <th>Manager</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hub Jakarta Pusat</td>
+                                        <td>Jakarta</td>
+                                        <td>Manager Jakarta</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hub Surabaya</td>
+                                        <td>Surabaya</td>
+                                        <td>Manager Surabaya</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hub Bandung</td>
+                                        <td>Bandung</td>
+                                        <td>Manager Bandung</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Shipments Management Tab -->
+                    <div class="admin-content" id="shipments-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h3>Daftar Pengiriman</h3>
+                            <button class="btn btn-primary" onclick="showShipmentForm()">
+                                <i class="fas fa-plus"></i>
+                                Tambah Pengiriman
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. Resi</th>
+                                        <th>Pengirim</th>
+                                        <th>Penerima</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>TQ240001</td>
+                                        <td>John Doe</td>
+                                        <td>Budi Santoso</td>
+                                        <td>Dalam Perjalanan</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>TQ240002</td>
+                                        <td>Jane Smith</td>
+                                        <td>Sari Dewi</td>
+                                        <td>Diproses</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>TQ240003</td>
+                                        <td>Robert Brown</td>
+                                        <td>Ahmad Rahman</td>
+                                        <td>Terkirim</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hub Dashboard -->
+    <section id="hub-dashboard" class="page-section">
+        <div class="dashboard">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="user-avatar">H</div>
+                        <div>
+                            <h2>Dashboard Hub Jakarta</h2>
+                            <p>Operasional hub dan koordinasi pengiriman</p>
+                        </div>
+                    </div>
+                    <button class="btn logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Keluar
+                    </button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">320</div>
+                        <div class="stat-label">Paket Masuk Hari Ini</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">280</div>
+                        <div class="stat-label">Paket Keluar</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Kurir Aktif</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">40</div>
+                        <div class="stat-label">Pending Pickup</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Operasional Hub</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showCourierPerformance()">
+                            <i class="fas fa-chart-line"></i>
+                            Kinerja Kurir
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showHubPerformance()">
+                            <i class="fas fa-analytics"></i>
+                            Kinerja Hub
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showScans()">
+                            <i class="fas fa-barcode"></i>
+                            Scan Paket
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showDeliveries()">
+                            <i class="fas fa-truck-loading"></i>
+                            Pengiriman
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courier Dashboard -->
+    <section id="courier-dashboard" class="page-section">
+        <div class="dashboard">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="user-avatar">C</div>
+                        <div>
+                            <h2>Dashboard Kurir</h2>
+                            <p>Manajemen pengiriman dan rute harian</p>
+                        </div>
+                    </div>
+                    <button class="btn logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Keluar
+                    </button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">25</div>
+                        <div class="stat-label">Paket Hari Ini</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Terkirim</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Sisa Pengiriman</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Progress Hari Ini</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Tugas Kurir</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showMyPackages()">
+                            <i class="fas fa-box"></i>
+                            Paket Saya
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showMyPerformance()">
+                            <i class="fas fa-chart-line"></i>
+                            Kinerja Saya
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showScans()">
+                            <i class="fas fa-barcode"></i>
+                            Scan Paket
+                        </button>
+                        <button class="btn btn-primary" style="justify-content: center; padding: 1rem;" onclick="showDeliveries()">
+                            <i class="fas fa-clipboard-check"></i>
+                            Bukti Pengiriman
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-shipping-fast"></i>
+                    TQY Express
+                </div>
+                <p>&copy; 2024 TQY Express. Semua hak cipta dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Variabel global untuk melacak state
+        let currentUser = null;
+        let currentSection = 'home';
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            const menuToggle = document.querySelector('.menu-toggle i');
+            
+            navMenu.classList.toggle('active');
+            
+            // Toggle hamburger to X icon
+            if (navMenu.classList.contains('active')) {
+                menuToggle.className = 'fas fa-times';
+            } else {
+                menuToggle.className = 'fas fa-bars';
+            }
+        }
+
+        // Fungsi untuk menampilkan section
+        function showSection(sectionName) {
+            // Sembunyikan semua section
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Tampilkan section yang dipilih
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Update navigasi active state
+            updateNavigation(sectionName);
+            
+            // Simpan current section
+            currentSection = sectionName;
+            
+            // Tutup mobile menu jika terbuka
+            closeMobileMenu();
+        }
+
+        // Fungsi untuk update navigasi active state
+        function updateNavigation(activeSection) {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === activeSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Fungsi untuk menutup mobile menu
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            const menuToggle = document.querySelector('.menu-toggle i');
+            
+            navMenu.classList.remove('active');
+            menuToggle.className = 'fas fa-bars';
+        }
+
+        // Fungsi login
+        function showLogin() {
+            showSection('login');
+        }
+
+        // Fungsi untuk menampilkan customer tracking
+        function showCustomerTracking() {
+            showSection('customer');
+        }
+
+        // Fungsi login dengan validasi
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Reset input
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+
+            // Validasi login
+            if (username === 'admin' && password === 'admin123') {
+                currentUser = 'admin';
+                showDashboard('admin-dashboard');
+            } else if (username === 'hub' && password === 'hub123') {
+                currentUser = 'hub';
+                showDashboard('hub-dashboard');
+            } else if (username === 'courier' && password === 'courier123') {
+                currentUser = 'courier';
+                showDashboard('courier-dashboard');
+            } else if (username === 'customer') {
+                currentUser = 'customer';
+                showSection('customer');
+            } else {
+                alert('Username atau password salah!\n\nGunakan:\n- admin / admin123\n- hub / hub123\n- courier / courier123\n- customer (tanpa password)');
+            }
+        }
+
+        // Fungsi untuk menampilkan dashboard
+        function showDashboard(dashboardId) {
+            // Sembunyikan semua section
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Tampilkan dashboard yang sesuai
+            const dashboard = document.getElementById(dashboardId);
+            if (dashboard) {
+                dashboard.classList.add('active');
+            }
+
+            // Update header untuk menampilkan user info
+            updateHeaderForLoggedInUser();
+        }
+
+        // Update header untuk user yang sudah login
+        function updateHeaderForLoggedInUser() {
+            const authButtons = document.getElementById('auth-buttons');
+            authButtons.innerHTML = `
+                <button class="btn btn-outline" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Keluar
+                </button>
+            `;
+        }
+
+        // Fungsi logout
+        function logout() {
+            currentUser = null;
+            
+            // Reset header
+            const authButtons = document.getElementById('auth-buttons');
+            authButtons.innerHTML = `
+                <button class="btn btn-outline" onclick="showLogin()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Masuk
+                </button>
+                <button class="btn btn-yellow" onclick="showCustomerTracking()">
+                    <i class="fas fa-search"></i>
+                    Lacak Paket
+                </button>
+            `;
+            
+            // Kembali ke halaman home
+            showSection('home');
+        }
+
+        // Fungsi tracking paket
+        function trackPackage() {
+            const trackingNumber = document.getElementById('tracking-number').value.trim();
+            
+            if (!trackingNumber) {
+                alert('Masukkan nomor resi terlebih dahulu');
+                return;
+            }
+
+            processTracking(trackingNumber);
+        }
+
+        // Fungsi test tracking
+        function testTrack(resiNumber) {
+            document.getElementById('tracking-number').value = resiNumber;
+            processTracking(resiNumber);
+        }
+
+        // Proses tracking dengan data dummy
+        function processTracking(resiNumber) {
+            const trackingResult = document.getElementById('tracking-result');
+            const packageData = getPackageData(resiNumber);
+            
+            if (packageData) {
+                // Update informasi paket
+                document.getElementById('package-id').textContent = '#' + resiNumber;
+                document.getElementById('package-route').textContent = packageData.route;
+                document.getElementById('package-receiver').textContent = packageData.receiver;
+                document.getElementById('package-status').textContent = packageData.status;
+                document.getElementById('package-status').className = `status-badge ${packageData.statusClass}`;
+                
+                // Update timeline
+                updateTimeline(packageData.timeline);
+                
+                // Tampilkan hasil
+                trackingResult.style.display = 'block';
+            } else {
+                alert('Nomor resi tidak ditemukan. Gunakan: TQ240001, TQ240002, atau TQ240003');
+            }
+        }
+
+        // Data dummy untuk tracking
+        function getPackageData(resiNumber) {
+            const packages = {
+                'TQ240001': {
+                    route: 'Jakarta → Surabaya',
+                    receiver: 'Budi Santoso',
+                    status: 'Dalam Perjalanan',
+                    statusClass: 'status-in-transit',
+                    timeline: [
+                        { status: 'Paket diterima di Hub Jakarta', time: '2024-01-15 09:00', location: 'Hub Jakarta' },
+                        { status: 'Paket dalam perjalanan ke Surabaya', time: '2024-01-15 14:30', location: 'Dalam Perjalanan' },
+                        { status: 'Paket tiba di Hub Surabaya', time: '2024-01-16 08:00', location: 'Hub Surabaya' }
+                    ]
+                },
+                'TQ240002': {
+                    route: 'Bandung → Jakarta',
+                    receiver: 'Sari Dewi',
+                    status: 'Diproses',
+                    statusClass: 'status-processing',
+                    timeline: [
+                        { status: 'Paket diterima di Hub Bandung', time: '2024-01-16 10:00', location: 'Hub Bandung' },
+                        { status: 'Paket diproses untuk pengiriman', time: '2024-01-16 11:30', location: 'Hub Bandung' }
+                    ]
+                },
+                'TQ240003': {
+                    route: 'Jakarta → Medan',
+                    receiver: 'Ahmad Rahman',
+                    status: 'Terkirim',
+                    statusClass: 'status-delivered',
+                    timeline: [
+                        { status: 'Paket diterima di Hub Jakarta', time: '2024-01-14 08:00', location: 'Hub Jakarta' },
+                        { status: 'Paket dalam perjalanan ke Medan', time: '2024-01-14 15:00', location: 'Dalam Perjalanan' },
+                        { status: 'Paket tiba di Hub Medan', time: '2024-01-15 09:00', location: 'Hub Medan' },
+                        { status: 'Paket berhasil diterima', time: '2024-01-15 14:00', location: 'Alamat Tujuan' }
+                    ]
+                }
+            };
+            
+            return packages[resiNumber] || null;
+        }
+
+        // Update timeline tracking
+        function updateTimeline(timelineData) {
+            const timeline = document.getElementById('package-timeline');
+            timeline.innerHTML = '';
+            
+            timelineData.forEach(item => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.innerHTML = `
+                    <h4>${item.status}</h4>
+                    <p>${item.time} - ${item.location}</p>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        // Fungsi kirim pesan contact
+        function sendMessage() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            
+            if (!name || !email || !message) {
+                alert('Harap isi semua field');
+                return;
+            }
+            
+            // Simulasi pengiriman pesan
+            alert('Terima kasih! Pesan Anda telah dikirim. Tim kami akan merespon dalam 24 jam.');
+            
+            // Reset form
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+        }
+
+        // Fungsi untuk beralih tab di admin dashboard
+        function switchTab(tabName) {
+            // Nonaktifkan semua tab
+            const tabs = document.querySelectorAll('.admin-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Aktifkan tab yang dipilih
+            const selectedTab = document.querySelector(`.admin-tab[data-tab="${tabName}"]`);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Sembunyikan semua konten
+            const contents = document.querySelectorAll('.admin-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Tampilkan konten yang dipilih
+            const selectedContent = document.getElementById(`${tabName}-content`);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+        }
+
+        // Fungsi-fungsi untuk navigasi dashboard
+        function showUserForm() {
+            alert('Fitur form pengguna akan ditampilkan di sini');
+        }
+
+        function showHubForm() {
+            alert('Fitur form hub akan ditampilkan di sini');
+        }
+
+        function showShipmentForm() {
+            alert('Fitur form pengiriman akan ditampilkan di sini');
+        }
+
+        function showReports() {
+            alert('Fitur laporan akan ditampilkan di sini');
+        }
+
+        function showCourierPerformance() {
+            alert('Fitur kinerja kurir akan ditampilkan di sini');
+        }
+
+        function showHubPerformance() {
+            alert('Fitur kinerja hub akan ditampilkan di sini');
+        }
+
+        function showScans() {
+            alert('Fitur scan paket akan ditampilkan di sini');
+        }
+
+        function showDeliveries() {
+            alert('Fitur pengiriman akan ditampilkan di sini');
+        }
+
+        function showMyPackages() {
+            alert('Fitur paket saya akan ditampilkan di sini');
+        }
+
+        function showMyPerformance() {
+            alert('Fitur kinerja saya akan ditampilkan di sini');
+        }
+
+        // Event listeners untuk tab admin
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tambahkan event listener untuk tab admin
+            const adminTabs = document.querySelectorAll('.admin-tab');
+            adminTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+            
+            // Enter key pada login
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            
+            if (usernameInput) {
+                usernameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        passwordInput.focus();
+                    }
+                });
+            }
+            
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        login();
+                    }
+                });
+            }
+            
+            // Enter key pada tracking
+            const trackingInput = document.getElementById('tracking-number');
+            if (trackingInput) {
+                trackingInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        trackPackage();
+                    }
+                });
+            }
+            
+            // Set initial navigation
+            updateNavigation('home');
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const nav = document.querySelector('nav');
+                const menuToggle = document.querySelector('.menu-toggle');
+                const navMenu = document.getElementById('nav-menu');
+                
+                if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+</html>
